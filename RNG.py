@@ -3,9 +3,6 @@ import secrets
 import matplotlib.pyplot as plt
 from scipy.stats import entropy
 
-N = 42
-BITS_TYPE = [0,1] 
-
 def TRS(N , BITS_TYPE):
     bits = []
     while len(bits) < N:
@@ -19,23 +16,27 @@ def entropy_seq(seq, BITS_TYPE):
     for bit in BITS_TYPE:
         pk.append(np.count_nonzero(seq == bit)/nbits)
     return entropy(pk, base=len(BITS_TYPE))
-                  
-sample = TRS(N, BITS_TYPE)
-for i in range(1000):
-    return_sample = TRS(N, BITS_TYPE)
-    sample = sample + return_sample
-sample = sample / (i+1.)
 
-fig, ax = plt.subplots()
-ax.stairs(sample, fill = True, color='orange')
-ax.set(xlabel = 'Bit number', ylabel = 'Average bit value', title='Distribution of bit values for each individual bit')
-fig.savefig('TRS_distribution.png')
+if __name__ == '__main__': 
+    N = 42
+    BITS_TYPE = [0,1] 
+    
+    sample = TRS(N, BITS_TYPE)
+    for i in range(1000):
+        return_sample = TRS(N, BITS_TYPE)
+        sample = sample + return_sample
+    sample = sample / (i+1.)
+
+    fig, ax = plt.subplots()
+    ax.stairs(sample, fill = True, color='orange')
+    ax.set(xlabel = 'Bit number', ylabel = 'Average bit value', title='Distribution of bit values for each individual bit')
+    fig.savefig('TRS_distribution.png')
 
 
-ent = entropy_seq(return_sample, BITS_TYPE)
+    ent = entropy_seq(return_sample, BITS_TYPE)
 
-print(f'Last TRS sample:\n{return_sample}, Entropy: {ent}')
+    print(f'Last TRS sample:\n{return_sample}, Entropy: {ent}')
 
-#basis alice [0 1 0 0 0 1 0 1 1 0 0 1 1 1 0 0 0 0 1 1 0 1 1 0 0 1 1 0 0 1 0 0 1 0 0 1 0 1 1 0 1 0], Entropy: 0.9934472383802027
-#bit alice [1 0 1 0 0 0 1 1 1 1 1 1 0 1 1 1 0 0 0 0 1 0 0 1 1 0 0 1 0 1 1 1 1 1 0 1 0 1 1 1 1 0], Entropy: 0.9736680645496202
-#basis bob [1 0 1 1 1 0 0 1 0 1 1 0 0 0 0 1 1 1 0 0 0 0 1 0 1 1 1 1 1 0 1 1 1 1 0 1 1 0 1 1 0 0], Entropy: 0.9852281360342515
+    #basis alice [0 1 0 0 0 1 0 1 1 0 0 1 1 1 0 0 0 0 1 1 0 1 1 0 0 1 1 0 0 1 0 0 1 0 0 1 0 1 1 0 1 0], Entropy: 0.9934472383802027
+    #bit alice [1 0 1 0 0 0 1 1 1 1 1 1 0 1 1 1 0 0 0 0 1 0 0 1 1 0 0 1 0 1 1 1 1 1 0 1 0 1 1 1 1 0], Entropy: 0.9736680645496202
+    #basis bob [1 0 1 1 1 0 0 1 0 1 1 0 0 0 0 1 1 1 0 0 0 0 1 0 1 1 1 1 1 0 1 1 1 1 0 1 1 0 1 1 0 0], Entropy: 0.9852281360342515
