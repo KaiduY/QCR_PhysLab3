@@ -1,6 +1,9 @@
 import numpy as np
 from RNG import TRS
 from numba import njit
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+from scipy.stats import norm, binom, poisson
 
 N = 42 # Number of bits per message 
 BITS_TYPE = [0,1] 
@@ -81,4 +84,62 @@ for k, noise in enumerate(NOISE_RANGE):
     max_error[k] = np.max(error)
     kl.append(key_length)
 kl = np.array(kl).flatten()
-print(avg_error)
+
+
+fig, ax = plt.subplots()
+dummyx = np.arange(np.min(kl), np.max(kl))
+ax.hist(kl, color = 'orange', bins=42//2, density=True, label = 'Samples')
+ax.plot(dummyx, binom.pmf(dummyx, 42, 0.5), label = 'Binomial PMF')
+ax.set_title('Distribution of the Key length')
+ax.set(xlabel = 'Key length (no. bits)', ylabel = 'Probability (normalized)')
+ax.legend()
+plt.savefig('Distribution_KEY_LENGTH.png', dpi=400)
+
+
+fig, ax = plt.subplots()
+
+def power_model(x, p0, p1):
+    return p1*x**p0
+
+def composite(x, p00, p10, p01, sw):
+    res = np.zeros_like(x)
+    p11 = sw**(p00 - p01)*p10
+    res[x<sw] = power_model(x[x<sw], p00, p10)
+    res[x>=sw] = power_model(x[x>=sw], p01, p11)
+    return res
+
+def gauss_cdf(x, mu, sigma, amp):
+    return amp*norm.cdf(x, loc=mu, scale=sigma)
+
+#guess = (2, 1.2, 0.2, 0.6)
+guess = (0.4, 0.1, 0.4)
+dummx = np.linspace(np.min(NOISE_RANGE),1, 1000)
+#popt, pcov = curve_fit(composite, NOISE_RANGE, avg_error, p0 = guess)
+popt, pcov = curve_fit(gauss_cdf, NOISE_RANGE, avg_error, p0 = guess)
+ax.plot(NOISE_RANGE, avg_error, 'r*', label = 'Average error')
+#ax.plot(dummx, composite(dummx, *popt), 'r', label = 'Average error')
+ax.plot(dummx, gauss_cdf(dummx, *popt), 'r', label = 'Average error')
+print(popt)
+
+print(f'Sigma: {np.sqrt(np.diag(pcov))}')
+print(f'Condition number: {np.linalg.cond(pcov):.2e}')
+
+
+#guess = (1.5, 2.5, 0.8, 0.2)
+guess = (0.4, 0.1, 0.4)
+#popt, pcov = curve_fit(composite, NOISE_RANGE, max_error, p0 = guess)
+popt, pcov = curve_fit(gauss_cdf, NOISE_RANGE, max_error, p0 = guess)
+ax.plot(NOISE_RANGE, max_error, 'b*', label = 'Maximum error')
+#ax.plot(dummx, composite(dummx, *popt), 'b', label = 'Maximum error')
+ax.plot(dummx, gauss_cdf(dummx, *popt), 'b', label = 'Maximum error')
+print(popt)
+print(f'Sigma: {np.sqrt(np.diag(pcov))}')
+print(f'Condition number: {np.linalg.cond(pcov):.2e}')
+
+#ax.set_yscale('log')
+#ax.set_xscale('log')
+ax.legend()
+ax.set_title('Error vs. noise')
+ax.set(xlabel = 'Noise level (std)', ylabel = 'Error')
+plt.savefig('Error_noise_dependency.png', dpi=400)
+
