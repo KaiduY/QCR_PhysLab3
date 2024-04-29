@@ -120,7 +120,6 @@ ax.plot(NOISE_RANGE, avg_error, 'r*', label = 'Average error')
 #ax.plot(dummx, composite(dummx, *popt), 'r', label = 'Average error')
 ax.plot(dummx, gauss_cdf(dummx, *popt), 'r', label = 'Average error')
 print(popt)
-
 print(f'Sigma: {np.sqrt(np.diag(pcov))}')
 print(f'Condition number: {np.linalg.cond(pcov):.2e}')
 

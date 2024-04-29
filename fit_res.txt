@@ -1,0 +1,5 @@
+Alice+Bob+Eve
+Noise = 0, mu=0.2475, sigma=0.0942
+Noise = 0.2, mu=0.2978, sigma=0.1043
+
+Alice+Bob
