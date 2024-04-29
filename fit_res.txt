@@ -1,5 +1,35 @@
-Alice+Bob+Eve
+######Alice+Bob+Eve
+MonteCarlo(1000) samples
 Noise = 0, mu=0.2475, sigma=0.0942
 Noise = 0.2, mu=0.2978, sigma=0.1043
 
-Alice+Bob
+######Alice+Bob
+MonteCarlo(1000) samples
+---Average error
+[0.38118207 0.19414503 0.46233418]
+Sigma: [0.00384619 0.00506572 0.00333801]
+Condition number: 9.07e+00
+---Max error
+[0.26292    0.19956964 0.79683756]
+Sigma: [0.00814635 0.01173311 0.01074313]
+Condition number: 6.39e+00
+---comment: the distribution of the keylegth is a binomial with N=42,p=0.5
+
+####Physical experiment
+#BEFORE EVE
+    #basis alice [0 1 0 0 0 1 0 1 1 0 0 1 1 1 0 0 0 0 1 1 0 1 1 0 0 1 1 0 0 1 0 0 1 0 0 1 0 1 1 0 1 0], Entropy: 0.9934472383802027
+    #bit alice [1 0 1 0 0 0 1 1 1 1 1 1 0 1 1 1 0 0 0 0 1 0 0 1 1 0 0 1 0 1 1 1 1 1 0 1 0 1 1 1 1 0], Entropy: 0.9736680645496202
+    #basis bob [1 0 1 1 1 0 0 1 0 1 1 0 0 0 0 1 1 1 0 0 0 0 1 0 1 1 1 1 1 0 1 1 1 1 0 1 1 0 1 1 0 0], Entropy: 0.9852281360342515
+#WITH EVE
+    #basis alice [1 0 1 1 1 0 1 0 0 1 0 1 1 1 0 1 1 1 1 1 0 1 0 1 0 1 0 0 1 0 1 0 1 0 1 0 0 1 0 0 0 0], Entropy: 0.998363672593813
+    #bit alice [0 1 0 1 0 1 1 1 1 1 0 0 1 0 0 1 0 0 1 1 1 0 0 1 1 1 0 1 1 0 1 1 1 1 0 0 1 0 0 0 1 1], Entropy: 0.9852281360342515
+    #basis Bob [1 0 0 0 0 0 1 0 0 1 0 1 0 1 0 1 0 1 1 0 0 0 0 0 1 1 0 1 1 1 1 1 1 0 0 0 0 0 1 1 1 1], Entropy: 0.998363672593813
+    #baisi Eve [0 1 0 0 1 0 0 1 0 1 1 0 1 1 1 0 1 0 0 0 1 1 1 0 0 1 0 1 0 1 1 0 0 1 0 0 0 1 0 1 1 0], Entropy: 0.998363672593813
+
+#######RSA
+[2.75596862e-09 6.83965425e-01] amp, tau: amp*e^(n*tau)
+Sigma: [1.61628582e-09 2.64882965e-02]
+Condition number: 3.75e+15
+Time for a 1024 bit long key is apx: 1.30e+288 yr
+
+

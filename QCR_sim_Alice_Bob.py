@@ -74,12 +74,12 @@ def MonteCarlo(nruns, noise):
         error[i] = 1 - np.sum(key_Bob == key_Alice)/max_len[i]
     return max_len, error
 
-NOISE_RANGE = np.linspace(0, NOISE, 20)
+NOISE_RANGE = np.linspace(0, NOISE, 40)
 avg_error = np.zeros_like(NOISE_RANGE)
 max_error = np.zeros_like(NOISE_RANGE)
 kl = []
 for k, noise in enumerate(NOISE_RANGE):
-    key_length, error = MonteCarlo(200, noise)
+    key_length, error = MonteCarlo(1000, noise)
     avg_error[k] = np.average(error)
     max_error[k] = np.max(error)
     kl.append(key_length)
